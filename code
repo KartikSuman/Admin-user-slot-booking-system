@@ -1,0 +1,479 @@
+#include <bits/stdc++.h>
+#include <unistd.h>
+using namespace std;
+
+int choice,choice2,choice_3,choice_5,choice_6,choice_7;
+char choice_4;
+string a_name,u_name;
+string a_username,u_username;
+string a_password,u_password;
+string a_email,u_email;
+long long a_mob_no,u_mob_no;
+
+class Admin
+{
+public:
+    string ad_name;
+    long long ad_mob_no;
+    string ad_email;
+    string ad_username;
+    string ad_password;
+    vector<tuple<int,int,string>>slots;
+    int total_slot=0;
+   void set_data(string ad_name,long long ad_mob_no,string ad_email,string ad_username,string ad_password)
+    {
+        this->ad_name=ad_name;
+        this->ad_mob_no=ad_mob_no;
+        this->ad_email=ad_email;
+        this->ad_username=ad_username;
+        this->ad_password=ad_password;
+    }
+
+};Admin a;
+
+class User
+{
+public:
+    string us_name;
+    long long us_mob_no;
+    string us_email;
+    string us_username;
+    string us_password;
+
+   void set_data(string us_name,long long us_mob_no,string us_email,string us_username,string us_password)
+    {
+        this->us_name=us_name;
+        this->us_mob_no=us_mob_no;
+        this->us_email=us_email;
+        this->us_username=us_username;
+        this->us_password=us_password;
+    }
+   };
+vector<User>ob_vector ;
+
+
+void user_panel()
+{
+     system("cls");
+        cout<<"\t\t\t\t\t\t-+-+-+-+-+-+-+-+-+-+-+-+-+-\n";
+        cout<<"\t\t\t\t\t\t|    USER PANEL            |\n";
+        cout<<"\t\t\t\t\t\t|     1. Register          |\n";
+        cout<<"\t\t\t\t\t\t|     2. Login             |\n";
+        cout<<"\t\t\t\t\t\t-+-+-+-+-+-+-+-+-+-+-+-+-+-\n";
+        cout<<"\t\t\t\t\t\t Enter choice :";
+            cin>>choice2;
+        if(choice2>=0 && choice2<=9)
+        {
+
+            switch(choice2)
+            {
+
+                case 1:
+                {
+
+                    cout<<"REGISTRATION FORM \n";
+                   User *u=new User;
+                    cout<<endl<<"Enter name : \t";
+                       cin>>u->us_name ;
+                    cout<<endl<<"Enter Mobile_num : \t";
+                        cin>>u->us_mob_no;
+                    cout<<endl<<"Enter email id : \t";
+                        cin>>u->us_email;
+                    take_user_name:
+                        int flag=0;
+                    cout<<endl<<"Enter username : \t";
+                        cin>>u->us_username;
+                        for(auto k:ob_vector)
+                        {
+                          if(k.us_username==u->us_username)
+                            flag=1;
+                        }
+                        if(flag==1)
+                            {
+                                cout<<"THE ENTERED USERNAME ALREADY EXISTS.\nENTER ANOTHER USERNAME \n\n";
+                                goto take_user_name;
+                            }
+                    cout<<endl<<"Enter password : \t";
+                        cin>>u->us_password;
+
+                ob_vector.push_back(*u);
+
+                    cout<<"\t\t\t"<<u->us_name<<" has been successfully registered\n";
+                    system("PAUSE");
+                }
+                    break;
+                case 2:
+                {
+                    int flag=0;
+                    cout<<"\nEnter username : \t";
+                        cin>>u_username;
+                    cout<<"\nEnter password : \t";
+                        cin>>u_password;
+
+                    for(auto i:ob_vector)
+                    {
+                      //  cout<<"\nSearching at index : "<<i-ob_vector.begin()<<" \n";
+                       if(i.us_username==u_username && i.us_password==u_password)
+                        {
+                        cout<<"\t\t\t"<<i.us_name<<" You are successfully logged in !!! \n\n";
+                        flag=1;
+
+                        do{
+                            cout<<"\t\t\tSelect an option : "<<i.us_name<<"\n";
+                            cout<<"\t\t 1. Book Slots\n";
+                            cout<<"\t\t 2. View Slot \n";
+                            cout<<"\t\t 0. EXIT \n";
+                            cin>>choice_6;
+                            switch(choice_6)
+                             {
+                                case 1:
+                                {   if(a.slots.size()>0){
+                                    int count=0;
+                                     sort(a.slots.begin(),a.slots.end());
+                                     cout<<"THE SLOTS ARE \n";
+                                     cout<<"S.NO. "<<"|\t"<<"START TIME "<<"|\t"<<"END TIME "<<"|\t"<<"STATUS"<<" |\n";
+                                        for(auto j:a.slots)
+                                            {
+                                               cout<<++count<<" |\t "<<get<0>(j)<<"|\t\t"<<get<1>(j)<<"|\t\t"<<get<2>(j)<<"\n";
+
+                                            }
+
+                                            cout<<"\nTotal slot ="<<a.total_slot<<"\n";
+
+                                            cout<<"\t\t\t Enter the slot number that u wish to book : ";
+                                            cin>>choice_7;
+                                            if(get<2>(a.slots[choice_7-1])=="VACANT")
+                                            {
+                                                cout<<"\t\t Booking in progress ";
+                                                for(int k=0;k<5;k++)
+                                                {
+                                                    sleep(1);
+                                                    cout<<". ";
+
+                                                }
+                                                cout<<"\n\n\t\t\tSlot Reserved \n";
+                                                get<2>(a.slots[choice_7-1])=i.us_name;
+                                            }
+                                            else
+                                            {
+                                                cout<<"\t\t Sorry the slot you requested is not available \n"
+                                                <<"\t\tPlease try booking any other slot or retry when the slot is vacant \n\n\n";
+                                            }
+                                }
+                                else
+                                {
+                                    cout<<"\t\t THE ADMIN HASN'T YET ADDED ANY SLOT, PLEASE WAIT FOR THE ADMIN TO ADD A SLOT\n\n";
+                                }
+                                }
+
+                                    break;
+                                case 2:
+                                {
+                                    if(a.slots.size()>0){
+                                       cout<<"THE SLOTS ARE \n";
+                                     cout<<"S.NO. "<<"|\t"<<"START TIME "<<"|\t"<<"END TIME "<<"|\t"<<"STATUS"<<"\n";
+                                        for(auto j:a.slots)
+                                            {
+                                                int count=0;
+                                               cout<<++count<<"|\t "<<get<0>(j)<<"|\t\t"<<get<1>(j)<<"|\t\t"<<get<2>(j)<<"\n";
+
+                                            }
+
+                                            cout<<"\nTotal slot ="<<a.total_slot<<"\n";
+                                    }
+                                    else
+                                        cout<<"\t\t THE ADMIN HASN'T YET ADDED ANY SLOT, PLEASE WAIT FOR THE ADMIN TO ADD A SLOT\n\n";
+
+                                }
+                                    break;
+                              }
+                            }while(choice_6!=0);
+                        }
+                    }
+
+                        if(flag==0)
+                        {
+                            cout<<" \t\t Username or password is wrong \n";
+                        }
+
+                      //  user_after_login(u);
+                        system("PAUSE");
+                }
+                    break;
+            }
+        }else
+        cout<<"\n\t\tENTER PROPER INPUT \n";
+
+}
+void perform_after_admin_login()
+{
+perform_after_admin_login:
+    do{
+
+        cout<<"\t\t\tSelect an option :\n";
+        cout<<"\t\t 1. Add Slot \n";
+        cout<<"\t\t 2. View Slots\n";
+        cout<<"\t\t 3. Remove Slot \n";
+        cout<<"\t\t 4. View all Users \n";
+        cout<<"\t\t 0. EXIT \n";
+        cin>>choice_3;
+    if(choice_3>=0 && choice_3<=4)
+    {
+
+
+        tuple<int,int,string>t;
+        switch(choice_3)
+        {
+
+        case 1:
+            {
+                cout<<"\t\t\tENTER SLOT DETAILS\n";
+                cout<<" START TIME : ";
+                cin>>get<0>(t);
+                cout<<" END TIME : ";
+                cin>>get<1>(t);
+                cout<<"\t\t\t ARE YOU SURE ABOUT THIS TIME (PRESS Y FOR YES /N FOR NO) ";
+                cin>>choice_4;
+                if(choice_4=='Y' || choice_4=='y')
+                {
+                    get<2>(t)="VACANT";
+
+                    a.slots.push_back(t);
+                    cout<<"\n\t\t\t\tSLOT SUCCESSFULLY ADDED \n";
+                    a.total_slot++;
+                }
+            }
+            break;
+        case 2:
+            {
+                sort(a.slots.begin(),a.slots.end());
+                cout<<"YOUR SLOTS ARE \n";
+                cout<<"START TIME "<<"\t"<<"END TIME "<<"\t"<<"STATUS"<<"\n";
+                for(auto i:a.slots)
+
+                    cout<<get<0>(i)<<"\t\t"<<get<1>(i)<<"\t\t"<<get<2>(i)<<"\n";
+
+                cout<<"\nTotal slot ="<<a.total_slot<<"\n";
+            }
+            break;
+        case 3:
+            {
+                if(a.slots.size()>0){
+                sort(a.slots.begin(),a.slots.end());
+                cout<<"YOUR SLOTS ARE \n";
+                cout<<"START TIME "<<"\t"<<"END TIME "<<"\t"<<"STATUS"<<"\n";
+                for(auto i:a.slots)
+
+                    cout<<get<0>(i)<<"\t\t"<<get<1>(i)<<"\t\t"<<get<2>(i)<<"\n";
+
+                cout<<"\nTotal slot ="<<a.total_slot<<"\n";
+
+                    cout<<"\n\n\t\t\t\ ENTER THE SLOT SEQUENCE YOU WANT TO DELETE :";
+                    cin>>choice_5;
+
+                    a.slots.erase(a.slots.begin()+choice_5-1);
+                    a.total_slot--;
+                     sort(a.slots.begin(),a.slots.end());
+
+                cout<<"\n\nYOUR SLOTS ARE \n";
+                cout<<"START TIME "<<"\t"<<"END TIME "<<"\t"<<"STATUS"<<"\n";
+                for(auto i:a.slots)
+
+                    cout<<get<0>(i)<<"\t\t"<<get<1>(i)<<"\t\t"<<get<2>(i)<<"\n";
+
+                cout<<"\nTotal slot ="<<a.total_slot<<"\n";
+                }
+                else
+                    cout<<"\n\n\t\t\tYou don't have sufficient slot for deletion!!!\n";
+
+            }
+            break;
+        case 4:
+            {
+
+                cout<<"\n\t\t\tTotal Users available are \n";
+                int count=0;
+                for(auto i:ob_vector)
+                {
+                    cout<<++count<<"\n";
+                    cout<<i.us_name<<"\n";
+                    cout<<i.us_mob_no<<"\n";
+                    cout<<i.us_email<<"\n";
+                    cout<<i.us_username<<"\n";
+                    cout<<i.us_password<<"\n\n";
+
+                }
+                cout<<"\t\t\t\tTotal Users = "<<ob_vector.size()<<"\n\n";
+            }
+            break;
+
+            }
+    }
+    else
+        {
+            cout<<"\n\n\t\t Enter proper Input \n";
+            goto perform_after_admin_login;
+        }
+    }while(choice_3!=0);
+    }
+
+void admin_panel()
+{
+    system("cls");
+        cout<<"\t\t\t\t\t\t-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n";
+        cout<<"\t\t\t\t\t\t|    ADMIN PANEL                     |\n";
+        cout<<"\t\t\t\t\t\t|     1. Register                    |\n";
+        cout<<"\t\t\t\t\t\t|     2. Login                       |\n";
+        cout<<"\t\t\t\t\t\t|     3. Forgot Username/password    |\n";
+        cout<<"\t\t\t\t\t\t-+-+-+-+-+-+-+-+-+-+-+-+-+--+-+-+-+-+-\n";
+        cout<<"\t\t\t\t\t\t Enter choice :";
+            cin>>choice2;
+        if(choice2>=0 && choice2<=9)
+        {
+            switch(choice2)
+            {
+
+                case 1:
+                {
+                    cout<<"REGISTRATION FORM \n";
+                    cout<<endl<<"Enter name : \t";
+                        cin>>a_name;
+                        number:
+                    cout<<endl<<"Enter Mobile_num : \t";
+                        cin>>a_mob_no;
+                        string m_num = to_string(a_mob_no);
+                        if(m_num.size() != 10)
+                        {
+                            cout<<"* Mobile number must be of 10 digit.\n";
+                            goto number;
+                        }
+                        mail:
+                    cout<<endl<<"Enter email id : \t";
+                        cin>>a_email;
+
+                        if((a_email.find(".com") == string::npos) || (a_email.find('@') == string::npos))
+                        {
+                            cout<<"* Email must contains '@' and '.com'."<<endl;
+                            goto mail;
+                        }
+                    cout<<endl<<"Enter username : \t";
+                        cin>>a_username;
+                        pass:
+                    cout<<endl<<"Enter password : \t";
+                        cin>>a_password;
+                        if(a_password.size() >= 8)
+                        {
+                            a.set_data(a_name,a_mob_no,a_email,a_username,a_password);
+                            cout<<"\t\t\t"<<a_name<<" has been successfully registered\n";
+                        }
+                        else
+                        {
+                            cout<<"* Password must be equal to or greater than 8 digit \n";
+                            goto pass;
+                        }
+
+                   system("PAUSE");
+                }
+            break;
+        case 2:
+                {
+                    cout<<"\nEnter username : \t";
+                        cin>>a_username;
+                    cout<<"\nEnter password : \t";
+                        cin>>a_password;
+
+                    if(a_username==a.ad_username && a_password==a.ad_password)
+                    {
+                        cout<<"\t\t\t"<<a.ad_name<<" You are successfully logged in !!! \n\n";
+                        perform_after_admin_login();
+                    }
+                    else
+                    {
+                        cout<<" \t\t Username or password is wrong \n";
+                    }
+                    system("PAUSE");
+                }
+            break;
+        case 3:
+            {
+                if(a.ad_mob_no==0)
+                {
+                    cout<<"\n\t\t\t\t\tADMIN ID HAS NOT BEEN REGISTERED !!! \n";
+                    system("pause");
+                }
+                else
+                {cout<<"\nEnter your email-id : \t";
+                cin>>a_email;
+                cout<<"\nEnter your Mobile number : \t";
+                cin>>a_mob_no;
+                cout<<"\n\n\t\t\t\tVerifying your details ";
+                for(int i=0;i<5;i++)
+                {
+
+                    cout<<". ";
+                    sleep(1);
+                }
+                cout<<"\n\t\t\t\t Congrats ! Your Id has been Retrieved...\n";
+                cout<<"Name : "<<a.ad_name<<"\n";
+                cout<<"Email-d : "<<a.ad_email<<"\n";
+                cout<<"Mobile_Number : "<<a.ad_mob_no<<"\n";
+                cout<<"Username : "<<a.ad_username<<"\n";
+                cout<<"Password : "<<a.ad_password<<"\n\n";
+                system("PAUSE");
+                }
+
+
+            }
+            break;
+        default:
+            cout<<"Choose a correct option \n";
+            system("PAUSE");
+            }
+        }
+        else if((choice2>='a' && choice2<='z')||(choice2>='A' && choice2<='Z'))
+            cout<<"\n\n\t\t\tENTER PROPER INPUT \n";
+        else
+            cout<<"\n\n\t\t\tENTER PROPER INPUT \n";
+}
+
+void welcome_page()
+{
+    do{     cout<<"\t\t\t\t+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n";
+            cout<<"\t\t\t\t|  WELCOME TO ADMIN USER SLOT BOOKING SYSTEM    |\n";
+            cout<<"\t\t\t\t|\tchoose your profile:                    |\n";
+            cout<<"\t\t\t\t|\t 1. Admin                               |\n";
+            cout<<"\t\t\t\t|\t 2. User                                |\n";
+            cout<<"\t\t\t\t|\t 3. Exit (0)                            |\n";
+            cout<<"\t\t\t\t+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\n";
+            cout<<"\n\t\t\t\t\t Enter the choice : ";
+
+                cin>>choice;
+                if(choice>=0 && choice <=9)
+                {
+
+                    switch(choice)
+                    {
+                        case 1:
+                            admin_panel();
+                            system("CLS");
+                            break;
+                        case 2:
+                            user_panel();
+                            system("CLS");
+                            break;
+
+                    }
+                }
+               /* else if((choice>='a' && choice<='z')||(choice>='A' && choice<='Z'))
+            cout<<"\n\n\t\t\tENTER PROPER INPUT \n";
+            else
+            cout<<"\n\n\t\t\tENTER PROPER INPUT \n";*/
+    }while(choice!=0);
+cout<<"\t\t\tYOU EXITED !!! \n";
+}
+int main()
+{
+        welcome_page();
+
+    return 0;
+}
